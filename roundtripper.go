@@ -13,6 +13,10 @@ type srvRoundTripper struct {
 }
 
 func (s *srvRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
+	if s.original == nil {
+		return nil, fmt.Errorf("original RoundTripper is not set")
+	}
+
 	scheme := req.URL.Scheme
 	if scheme == "https+srv" {
 		req.URL.Scheme = "https"
@@ -27,7 +31,7 @@ func (s *srvRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 	if err != nil {
 		return nil, err
 	}
-	// It's good practice to handle the case where no SRV records are found.
+
 	if len(rrs) == 0 {
 		return nil, fmt.Errorf("SRV lookup for %s returned no records", hostname)
 	}
@@ -45,6 +49,9 @@ func (s *srvRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
 func AddSRVRoundTripper(original http.RoundTripper, transport *http.Transport) {
 	rtt := &srvRoundTripper{
 		original: original,
+	}
+	if original == nil {
+		rtt.original = http.DefaultTransport
 	}
 	transport.RegisterProtocol("https+srv", rtt)
 	transport.RegisterProtocol("http+srv", rtt)
