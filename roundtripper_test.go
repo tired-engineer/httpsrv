@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-// mockRoundTripper is a mock implementation of http.RoundTripper for testing.	
+// mockRoundTripper is a mock implementation of http.RoundTripper for testing.
 
 type mockRoundTripper struct {
 	roundTripFunc func(req *http.Request) (*http.Response, error)
@@ -173,34 +173,34 @@ func TestSRVRoundTripper_RoundTrip(t *testing.T) {
 	})
 
 	successTestCases := []struct {
-		name               string
-		originalScheme     string
-		expectedScheme     string
-		srvHostname        string
-		srvPort            uint16
-		srvTarget          string // May include trailing dot
-		expectedHostInURL  string
-		requestPath        string
+		name              string
+		originalScheme    string
+		expectedScheme    string
+		srvHostname       string
+		srvPort           uint16
+		srvTarget         string // May include trailing dot
+		expectedHostInURL string
+		requestPath       string
 	}{
 		{
-			name:               "HTTP+SRV successful lookup",
-			originalScheme:     "http+srv",
-			expectedScheme:     "http",
-			srvHostname:        "api.service.consul",
-			srvPort:            8080,
-			srvTarget:          "node1.consul.", // Note trailing dot
-			expectedHostInURL:  "node1.consul.:8080",
-			requestPath:        "/healthz",
+			name:              "HTTP+SRV successful lookup",
+			originalScheme:    "http+srv",
+			expectedScheme:    "http",
+			srvHostname:       "api.service.consul",
+			srvPort:           8080,
+			srvTarget:         "node1.consul.", // Note trailing dot
+			expectedHostInURL: "node1.consul.:8080",
+			requestPath:       "/healthz",
 		},
 		{
-			name:               "HTTPS+SRV successful lookup",
-			originalScheme:     "https+srv",
-			expectedScheme:     "https",
-			srvHostname:        "secure.service.consul",
-			srvPort:            8443,
-			srvTarget:          "secure-node.internal", // No trailing dot
-			expectedHostInURL:  "secure-node.internal:8443",
-			requestPath:        "/status",
+			name:              "HTTPS+SRV successful lookup",
+			originalScheme:    "https+srv",
+			expectedScheme:    "https",
+			srvHostname:       "secure.service.consul",
+			srvPort:           8443,
+			srvTarget:         "secure-node.internal", // No trailing dot
+			expectedHostInURL: "secure-node.internal:8443",
+			requestPath:       "/status",
 		},
 	}
 
